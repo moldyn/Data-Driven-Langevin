@@ -48,6 +48,6 @@ source_main contains the normally used c-code. Stick to it for the start.
 
 source_b2_fieldestimation contains the code for an alternative estimation of the fields
 
-source_b3_fieldestimation contains the code for anonther alternative estimation of the fields
+source_b3_fieldestimation contains the code for another alternative estimation of the fields
 
 FOR FURTHER INFOMATION PLEASE HAVE A LOOK AT THE READMES OF THE DIFFERENT source_... FOLDERS.
