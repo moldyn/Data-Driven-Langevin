@@ -22,13 +22,20 @@ To install the programs adjust the makefile in the main directory and the one
 in the routines subdirectory to your needs. If you are using a linux system, you should
 be fine with the default settings. Maybe you have to change the BINDIR variable.
 
+COMMENT TO THE SUFFIX b3
+
+The code here uses alternative formulas to estimate the Langevin fields. For 
+beginners, we recommend to stick to source_main (b1) since publications are available
+where the b1 implementation is used.
 
 THE PROGRAMS:
   1. General remarks
   2. General command line switches
   3. The programs
-    3.1 langevin
-    3.2 langevin-tm
+    3.1 ol-second_b3
+    3.2 ol-second-tm_b3
+    3.3 ol-first_b3
+    3.4 ol-first-tm_b3
  
 1. General remarks
 The programs are written to be used within a shell. There is nothing similar to a
@@ -93,7 +100,82 @@ some of the programs. The main general switches are:
 
 		
 3. The programs
-3.1 langevin
+
+The programs whose names contain "second" use the Markovian Langevin equation, the programs
+whose names contain "first" use the Overdamped Langevin equation. WE RECOMMENT TO USE THE
+PROGRAMS WHICH USE THE MARKOVIAN LANGEVIN EQUATION SINCE ITS BROADER APPLICABLE THAN THE
+OVERDAMPED LANGEVIN EQUATION.
+
+3.1 ol-second_b3
+
+This program simply takes the last point of the input datafile and iterates it into
+the future, thus creating an artificial trajectory. The program creates two datafiles.
+The first two lines of both output files are comments containing the call of the
+program with all switches given on the first and column labels on the second line.
+
+The first one simply contains the iterated trajectory consisting of the 'num' columns
+given by '-m'. The second file contains the fields. The filename is 
+'name of outputfile'.field
+
+The first m columns are the components of the vector where the field was estimated.
+
+The next m columns are the components of the drift field.
+
+The next m*m columns are the components of the friction field
+
+The next m*(m+1)/2 are the relevant components of the diffusion field (the lower
+triangular matrix achieved from the Cholesky decomposition).
+
+The last component is the distance of the 'k'-th neighbor from the actual point,
+which means it is the neighborhood size used for the local averages.
+
+Additional command line switches:
+	-% num	Add noise with absolute amplitude 'num' to the data before	
+		starting the analysis. This is meant for cases where the
+		data has such low resolution, that many points collapse to
+		a single position given rise to ill defined distances.
+
+	-I num	Set the seed for the internal random number generator to
+		'num'. This might be useful if a ensemble of trajectories
+		shall be created.
+
+3.2 ol-second-tm_b3
+This program does not iterate a trajectory but simply creates the fields
+at the positions of the existing data. This is done by taking points from
+the given input data and fitting the field as if the point was not part of
+the input data file.
+
+One output file is created that contains
+m+m+m*m+m*(m+1)/2+m+1 columns.
+
+The first m columns are the components of the vector where the field was 
+estimated.
+
+The next m columns are the components of the drift field.
+
+The next m*m columns are the components of the friction field
+
+The next m*(m+1)/2 are the relevant components of the diffusion field (the
+lower triangular matrix achieved from the Cholesky decomposition).
+
+The next m columns contain the noise which would be needed to reach the
+successor of the point, which is known.
+
+The last component is the distance of the 'k'-th neighor from the actual point, 
+which means it is the neighborhood size used for the local averages.
+
+Additional command line switches:
+	-% num	Add noise with absolute amplitude 'num' to the data before	
+		starting the analysis. This is meant for cases where the
+		data has such low resolution, that many points collapse to
+		a single position given rise to ill defined distances.
+
+	-I num	Set the seed for the internal random number generator to
+		'num'. This might be useful if a ensemble of trajectories
+		shall be created.
+
+
+3.3 ol-first_b3
 
 This program simply takes the last point of the input datafile and iterates it into
 the future, thus creating an artificial trajectory. The program creates two datafiles.
@@ -128,8 +210,9 @@ Additional command line switches:
 	-I num	Set the seed for the internal random number generator to
 		'num'. This might be useful if a ensemble of trajectories
 		shall be created.
+		
+3.4 ol-first-tm_b3
 
-3.2 langevin-tm
 This program does not iterate a trajectory but simply creates the fields
 at the positions of the existing data. This is done by taking points from
 the given input data and fitting the field as if the point was not part of
@@ -163,3 +246,14 @@ Additional command line switches:
 	-I num	Set the seed for the internal random number generator to
 		'num'. This might be useful if a ensemble of trajectories
 		shall be created.
+		
+REFERENCES
+
+To have a look at the basic ideas and some applications of the data driven
+Langevin equation please have a look at 
+
+- Hegger and Stock, J. Chem. Phys. 130, 034106 (2009): here, the approach
+is developed based on the overdamped Langevin equation
+
+- Schaudinnus et al.,  Phys. Rev. Lett. 115, 050602 (2015): here, the 
+Markovian Langevin equation is used instead of the overdamped equation
