@@ -17,149 +17,37 @@
  *   along with OLANGEVIN; if not, see <http://www.gnu.org/licenses/>.
  */
 
-INSTALLATION
-To install the programs adjust the makefile in the main directory and the one 
-in the routines subdirectory to your needs. If you are using a linux system, you should
-be fine with the default settings. Maybe you have to change the BINDIR variable.
+QUICK START
 
+0) Download the files in source_main to some folder datadrivenlangevin
+1) Create inside datadrivenlangevin the subfolder bin
+2) Adjust the Makefile inside datadrivenlangevin and inside datadrivenlangevin/routines
+(was downloaded) as you need it
+3) Run make clean in the shell
+4) Run make install in the shell
 
-THE PROGRAMS:
-  1. General remarks
-  2. General command line switches
-  3. The programs
-    3.1 langevin
-    3.2 langevin-tm
- 
-1. General remarks
-The programs are written to be used within a shell. There is nothing similar to a
-GUI and there will (most probably) never be such a thing. This especially means that,
-if you are using Windows or similar, you have to install an environment that allows you
-to compile and run the programs. Since I'm not using Windows at all, I can not
-(and I will not) assist you at all.
+After this you get variouse programs inside of datadrivenlangevin/bin. Important are:
 
-2. General command line switches
-The programs use command line options to change parameters. Some of the switches are 
-general, in the sense that they are equal for all programs. Some are only used for 
-some of the programs. The main general switches are:
+- ol-second_b1: generates a Langevin model trajectory based on the Markovian Langevin
+equation by estimating the Langevin field from some data set, see for example
+Schaudinnus et al.,  Phys. Rev. Lett. 115, 050602 (2015)
 
-	-h	shows a help page with all possible switches available for this program.
+- ol-second-tm_b1: generates a so-called "testmodel"-run which means that fields and 
+noise which would have produced a given trajectory if it would have been produced based
+on the Markovian langevin equation are calculated. 
 
-	-l num	read 'num' lines from the input file. If 'num' is bigger than the number
-		of lines in the file, the file is read to the end. If not set, the whole
-		file is read. Lines starting with a '#' are treated as comments are
-		ignored.
+- ol-first_b1: does the same as ol-second_b1 but uses the OVERDAMPED Langevin equation
+as model, see Hegger and Stock, J. Chem. Phys. 130, 034106 (2009).
 
-	-x num	The first 'num' lines of the input file are ignored, regardless of 
-		whether these lines are comments or data lines.
+- ol-second-tm_b1: the same as ol-second-tm_b1 but uses the OVERDAMPED Langevin equation
+as model.
 
-	-m num	read 'num' columns from the input files.
+DESCRIPTION OF SOURCE FOLDERS
 
-	-c str	specifies which columns are read from the input file. If not set,
-		the first 'num' (as specified with -m ) columns are read. If you
-		would like to change give set 'str' to a comma separated list of
-		unsigned integers. Example '-m 2 -c 1,3' means: read columns 1 
-		and 3. The order is kept. That means '-c 2,1' reads column 2 as the
-		first component and column 1 as the second. If the number given with
-		-m is larger than the number of columns given with -c, the columns
-		succeeding the largest column given with -c are read in addition.
-		This means: '-m 3 -c 3,1' will read columns 3, 1 and 4.
+source_main contains the normally used c-code. Stick to it for the start.
 
-	-M num	Form delay vectors of dimension 'num' in addition to the number
-		of components given with -m. Checkout the literature for the
-		meaning of delay embedding.
+source_b2_fieldestimation contains the code for an alternative estimation of the fields
 
-	-d num	The time delay with which the delay vectors are build. Checkout
-		the literature for the meaning.
+source_b3_fieldestimation contains the code for anonther alternative estimation of the fields
 
-	-k num	This specifies the neighborhood size for the calculation of the
-		fields. 'num' means that the neighborhood is chosen that big that
-		it exactly contains the 'num' closest spatial neighbors of the
-		point to be forecasted.
-
-	-L num	Iterate a trajectory of length 'num'.
-
-	-F num	'num' is the column of the file that specifies whether the actual 
-		time step (the row of the input file) has a temporal successor. This
-		column of the file should only contain the values '0' and '1'.
-		'1' means there is a successor
-		'0' means there is none.
-		This is used if the input files contains several pieces of trajectories
-		glued together.
-
-	-o str	'str' is the name of the output datafile.
-
-	-V num	Verbosity level. The programs may produce some informational messages
-		which can be turned off by this switch.
-
-		
-3. The programs
-3.1 langevin
-
-This program simply takes the last point of the input datafile and iterates it into
-the future, thus creating an artificial trajectory. The program creates two datafiles.
-The first two lines of both output files are comments containing the call of the
-program with all switches given on the first and column labels on the second line.
-
-The first one simply contains the iterated trajectory consisting of the 'num' columns
-given by '-m'. The second file contains the fields. The filename is 
-'name of outputfile'.field
-
-Say the following switches were used '-m m -M M -k k'
-Then the file contains m*M+m+m*(m+1)/2+1 columns.
-
-The first m*M columns are the components of the vector where the field was estimated.
-The order is: First inputfile column + all its delays, second inputfile column + all
-its delays, ...
-
-The next m columns are the components of the drift field.
-
-The next m*(m+1)/2 are the relevant components of the diffusion field (the lower
-triangular matrix achieved from the Cholesky decomposition).
-
-The last component is the distance of the 'k'-th neighbor from the actual point,
-which means it is the neighborhood size used for the local averages.
-
-Additional command line switches:
-	-% num	Add noise with absolute amplitude 'num' to the data before	
-		starting the analysis. This is meant for cases where the
-		data has such low resolution, that many points collapse to
-		a single position given rise to ill defined distances.
-
-	-I num	Set the seed for the internal random number generator to
-		'num'. This might be useful if a ensemble of trajectories
-		shall be created.
-
-3.2 langevin-tm
-This program does not iterate a trajectory but simply creates the fields
-at the positions of the existing data. This is done by taking points from
-the given input data and fitting the field as if the point was not part of
-the input data file.
-
-One output file is created that contains
-m*M+m+m*(m+1)/2+m+1 columns.
-
-The first m*M columns are the components of the vector where the field was 
-estimated.
-The order is: First inputfile column + all its delays, second inputfile
-column + all its delays, ...
-
-The next m columns are the components of the drift field.
-
-The next m*(m+1)/2 are the relevant components of the diffusion field (the
-lower triangular matrix achieved from the Cholesky decomposition).
-
-The next m columns contain the noise which would be needed to reach the
-successor of the point, which is known.
-
-The last component is the distance of the 'k'-th neighor from the actual point, 
-which means it is the neighborhood size used for the local averages.
-
-Additional command line switches:
-	-% num	Add noise with absolute amplitude 'num' to the data before	
-		starting the analysis. This is meant for cases where the
-		data has such low resolution, that many points collapse to
-		a single position given rise to ill defined distances.
-
-	-I num	Set the seed for the internal random number generator to
-		'num'. This might be useful if a ensemble of trajectories
-		shall be created.
+FOR FURTHER INFOMATION PLEASE HAVE A LOOK AT THE READMES OF THE DIFFERENT source_... FOLDERS.
