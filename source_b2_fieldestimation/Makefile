@@ -16,7 +16,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with OLANGEVIN; if not, see <http://www.gnu.org/licenses/>.
 #
-prefix = /home/bl20/Arbeitsfläche/dLE2backup/olangevin_b2
+prefix = /home/datadrivenlangevin
 BINDIR = ${prefix}/bin
 SUFFIX = "_b2"
 
