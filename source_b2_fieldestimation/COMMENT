@@ -1,0 +1,3 @@
+This folder contains everything you need for dLE2 in b2-field-implementation. The b2 implementation can be seen in routines/get_fields_no.c.
+
+get_fields_c calculates the fields for dLE1.
