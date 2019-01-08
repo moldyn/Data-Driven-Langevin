@@ -1,29 +1,10 @@
-/*
- *   This file is part of OLANGEVIN
- *
- *   Copyright (c) 2013 Rainer Hegger
- *
- *   OLANGEVIN is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   OLANGEVIN is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with OLANGEVIN; if not, see <http://www.gnu.org/licenses/>.
- */
-
-INSTALLATION
+# Installation
 To install the programs adjust the makefile in the main directory and the one 
 in the routines subdirectory to your needs. If you are using a linux system, you should
 be fine with the default settings. Maybe you have to change the BINDIR variable.
 
 
-THE PROGRAMS:
+# Programs:
   1. General remarks
   2. General command line switches
   3. The programs
@@ -242,7 +223,7 @@ Additional command line switches:
 		'num'. This might be useful if a ensemble of trajectories
 		shall be created.
 		
-REFERENCES
+# References
 
 To have a look at the basic ideas and some applications of the data driven
 Langevin equation please have a look at 
@@ -252,3 +233,20 @@ is developed based on the overdamped Langevin equation
 
 - Schaudinnus et al.,  Phys. Rev. Lett. 115, 050602 (2015): here, the 
 Markovian Langevin equation is used instead of the overdamped equation
+
+This file is part of OLANGEVIN
+
+Copyright (c) 2013 Rainer Hegger
+
+OLANGEVIN is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+ 
+OLANGEVIN is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+ 
+You should have received a copy of the GNU General Public License
+along with OLANGEVIN; if not, see <http://www.gnu.org/licenses/>.
