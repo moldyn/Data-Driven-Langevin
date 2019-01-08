@@ -234,6 +234,8 @@ is developed based on the overdamped Langevin equation
 - Schaudinnus et al.,  Phys. Rev. Lett. 115, 050602 (2015): here, the 
 Markovian Langevin equation is used instead of the overdamped equation
 
+# Licensing
+
 This file is part of OLANGEVIN
 
 Copyright (c) 2013 Rainer Hegger
